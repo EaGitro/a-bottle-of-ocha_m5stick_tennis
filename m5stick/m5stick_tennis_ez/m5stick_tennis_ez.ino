@@ -145,7 +145,7 @@ void loop() {
 
     Serial.printf("[JSON]: %s\n", json);
 
-    char url[1024] = "http://eagitrodev.pythonanywhere.com/m5stick/post"; 
+    char url[1024] = "http://eagitrodev.pythonanywhere.com/m5stick_tennis/post"; 
 
     // url
     httpClient.begin(url);
@@ -158,6 +158,10 @@ void loop() {
       String response = httpClient.getString();
       Serial.printf("[HTTP RESPONSE]: %s", response);
 
+    }else{
+        Serial.printf("[HTTP ERR CODE]: %d", httpCode);
+        String response = httpClient.getString();
+        Serial.printf("[HTTP RESPONSE]: %s", response);
     }
 
     httpClient.end();
