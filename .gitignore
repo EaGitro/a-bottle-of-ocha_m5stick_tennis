@@ -1,0 +1,10 @@
+# libraries
+
+libraries/
+libraries
+
+
+# secrets
+secrets/
+
+WifiSecret.h
