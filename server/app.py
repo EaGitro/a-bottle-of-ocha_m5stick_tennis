@@ -4,7 +4,7 @@ from flask import Flask, request
 app = Flask(__name__)
 
 
-@app.route("/m5stick_tennis/post", method=["POST"])
+@app.route("/m5stick_tennis/post", methods=["POST"])
 def m5stick_tennis_post():
     data = request.json
     prev_data = ""
