@@ -43,7 +43,7 @@ void loop() {
     M5.Lcd.setCursor(0, 0);  // Set the cursor at (0,0).  设置光标位于(0,0)处
     // char httpreq_base[1024] = "http://eagitrodev.pythonanywhere.com/m5stick" ;
     char httpreq[1024] = {0};
-    sprintf(httpreq, "http://eagitrodev.pythonanywhere.com/m5stick/%2d",random(1,200));
+    sprintf(httpreq, "https://example.com/");
     if ((wifiMulti.run() ==
          WL_CONNECTED)) {  // wait for WiFi connection.  等待连接至wifi
         M5.Lcd.print("[HTTP] begin...\n");
