@@ -34,7 +34,7 @@ def m5stick_tennis_post():
     with open(const.prev_data_path, mode="w") as f:
         f.write(prev_data)
     
-    return f"OK. prevdata:{prev_data}"
+    return f"OK. prevdata:{prev_data}\n"
 
 
 

@@ -54,8 +54,8 @@ float gyros_1term[frequency_within_term][3];
 int timers_1term[frequency_within_term];
 int counts_1term[frequency_within_term];
 void get_1term_data(int frequency_within_term, int delay_within_term,
-                    float accs_1term[][3], float gyros_1term[][3], int *timers_1term,
-                    int *counts_1term) {
+                    float accs_1term[][3], float gyros_1term[][3],
+                    int *timers_1term, int *counts_1term) {
     for (int i = 0; i < frequency_within_term; i++) {
         readGyro();
         for (int xyz = 0; xyz < 3; xyz++) {
@@ -73,7 +73,7 @@ void get_1term_data(int frequency_within_term, int delay_within_term,
 /**
  * @brief Creates JSON from arrays, vars
  *
- * @details JSON scheme:`
+ * @details JSON scheme example:`
  * {
  *  term_cnt:0,
  *  freq:10,
@@ -90,8 +90,8 @@ void create_1term_json(char *json, const int frequency_within_term,
                        const float gyros_1term[][3], const int *timers_1term,
                        const int *counts_1term) {
 
-    sprintf(json, "{term_cnt:%d,freq:%d,delay:%d,moments:", term_count++,
-             frequency_within_term, delay_within_term);
+    sprintf(json, "{term_cnt:%d,freq:%d,delay:%d,moments:[", term_count++,
+            frequency_within_term, delay_within_term);
     for (int i = 0; i < frequency_within_term; i++) {
         char acc[128] = {0};
         char gyro[128] = {0};
@@ -99,10 +99,10 @@ void create_1term_json(char *json, const int frequency_within_term,
         array2json_arr(gyro, gyros_1term[i]);
         if (i != frequency_within_term - 1) {
             sprintf(json, "%s{cnt:%d,ms:%d,acc:%s,gyro:%s},", json,
-                     counts_1term[i], timers_1term[i], acc, gyro);
+                    counts_1term[i], timers_1term[i], acc, gyro);
         } else {
             sprintf(json, "%s{cnt:%d,ms:%d,acc:%s,gyro:%s}]}", json,
-                     counts_1term[i], timers_1term[i], acc, gyro);
+                    counts_1term[i], timers_1term[i], acc, gyro);
         }
     }
 }
@@ -136,35 +136,57 @@ void setup() {
 
 void loop() {
 
-    char json[1024] = {0};
+    if (wifiMulti.run() // これを忘れてたのが原因
+        == WL_CONNECTED) {
 
-    get_1term_data(frequency_within_term, delay_within_term, accs_1term,
-                   gyros_1term, timers_1term, counts_1term); // contains delay()
-    create_1term_json(json, frequency_within_term, delay_within_term,
-                      accs_1term, gyros_1term, timers_1term, counts_1term);
 
-    Serial.printf("[JSON]: %s\n", json);
 
-    char url[1024] = "http://eagitrodev.pythonanywhere.com/m5stick_tennis/post"; 
+        char json[2048] = {0};
 
-    // url
-    httpClient.begin(url);
-    // Content-Type
-    httpClient.addHeader("Content-Type", "application/json");
+        get_1term_data(frequency_within_term, delay_within_term, accs_1term,
+                       gyros_1term, timers_1term,
+                       counts_1term); // contains delay()
+        create_1term_json(json, frequency_within_term, delay_within_term,
+                          accs_1term, gyros_1term, timers_1term, counts_1term);
 
-    int httpCode = httpClient.POST((uint8_t*)json, strlen(json));
+        Serial.printf("[JSON]: %s\n", json);
 
-    if(httpCode == 200){
-      String response = httpClient.getString();
-      Serial.printf("[HTTP RESPONSE]: %s", response);
+        char url[1024] =
+            "http://eagitrodev.pythonanywhere.com/m5stick_tennis/post";
 
-    }else{
-        Serial.printf("[HTTP ERR CODE]: %d", httpCode);
-        String response = httpClient.getString();
-        Serial.printf("[HTTP RESPONSE]: %s", response);
+        // url
+        httpClient.begin(url);
+        // Content-Type
+        httpClient.addHeader("Content-Type", "application/json");
+
+        int httpCode = httpClient.POST((uint8_t *)json, strlen(json));
+
+        if (httpCode == 200) {
+            String response = httpClient.getString();
+            Serial.printf("[HTTP RESPONSE]: %s", response);
+
+        } else {
+            Serial.printf("[HTTP ERR CODE]: %d", httpCode);
+            String response = httpClient.getString();
+            Serial.printf("[HTTP RESPONSE]: %s\n", response);
+        }
+
+        httpClient.end();
+
+
+        // char url[1024] =
+        //     "https://eagitrodev.pythonanywhere.com/m5stick_tennis/data";
+
+        // httpClient.begin(url);
+        // int status_code = httpClient.GET();
+
+        // String response = httpClient.getString();
+        // Serial.printf("[HTTP ERR CODE]: %d", status_code);
+        // Serial.printf("[HTTP RESPONSE]: %s\n", response);
+        // httpClient.end();
+
+        // delay(1000);
     }
-
-    httpClient.end();
 }
 /*
 void loop() {
