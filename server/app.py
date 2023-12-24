@@ -60,6 +60,10 @@ def view():
     accelerations = f.read()
     return f"{accelerations}"
 
+@app.route("/health/text")
+def health_text():
+    return "health_text\n"
+
 
 if __name__ == "__main__":
     app.run(debug=True)  # デバッグモードがオンになり、変更があるとリロードされ変更が適用される。
