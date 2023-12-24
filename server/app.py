@@ -34,7 +34,7 @@ def m5stick_tennis_post():
     with open(const.prev_data_path, mode="w") as f:
         f.write(prev_data)
     
-    return f"OK. prevdata:{prev_data}\n"
+    return {"prevdata":prev_data}
 
 
 
@@ -50,7 +50,7 @@ def m5stick_tennis_data():
         with open(const.prev_data_path, mode="r") as f:
             prev_data = f.read()
 
-    return f"{{latest_data:{latest_data}, prev_data:{prev_data}}}" 
+    return {"latest_data":latest_data, "prev_data":prev_data}
 
 
 @app.route("/m5stick_tennis/view")
