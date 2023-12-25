@@ -2,10 +2,16 @@ from genericpath import isfile
 from math import cos
 from flask import Flask, request, make_response, jsonify
 import json, os
+
 # import ndjson
 
 app = Flask(__name__)
-app.json.ensure_ascii = False
+
+try:
+    app.json.ensure_ascii = False           # flask version >= 3.0.0
+except:
+    app.config['JSON_AS_ASCII'] = False     # flask version < 3.0.0
+
 
 class const:
     latest_data_path =  "data/m5stick_tennis_latest_data.json"

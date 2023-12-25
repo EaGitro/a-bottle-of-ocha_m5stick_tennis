@@ -203,7 +203,7 @@ void loop() {
          */
         char url[1024] = "https://eagitrodev.pythonanywhere.com/health/post/text";
         
-        char post_str[1024] = "hogehoge"
+        char post_str[1024] = "hogehoge";
         // url
         httpClient.begin(url);
         // Content-Type
@@ -211,7 +211,7 @@ void loop() {
 
         int httpCode = httpClient.POST((uint8_t *)post_str, strlen(post_str));
         String response = httpClient.getString();
-        Serial.printf("[HTTP ERR CODE]: %d", status_code);
+        Serial.printf("[HTTP ERR CODE]: %d", httpCode);
         Serial.printf("[HTTP RESPONSE]: %s\n", response);
         httpClient.end();
 
