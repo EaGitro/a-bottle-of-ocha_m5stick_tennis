@@ -139,43 +139,52 @@ void loop() {
     if (wifiMulti.run() // これを忘れてたのが原因
         == WL_CONNECTED) {
 
+        
+        /**
+         * @brief 本番用 POST 消すな!
+         * 
+         */
+        /*
+        char json[2048] = {0};
 
+        get_1term_data(frequency_within_term, delay_within_term, accs_1term,
+                       gyros_1term, timers_1term,
+                       counts_1term); // contains delay()
+        create_1term_json(json, frequency_within_term, delay_within_term,
+                          accs_1term, gyros_1term, timers_1term, counts_1term);
 
-        // char json[2048] = {0};
-
-        // get_1term_data(frequency_within_term, delay_within_term, accs_1term,
-        //                gyros_1term, timers_1term,
-        //                counts_1term); // contains delay()
-        // create_1term_json(json, frequency_within_term, delay_within_term,
-        //                   accs_1term, gyros_1term, timers_1term, counts_1term);
-
-        // Serial.printf("[JSON]: %s\n", json);
-
-        // char url[1024] =
-        //     "http://eagitrodev.pythonanywhere.com/m5stick_tennis/post";
-
-        // // url
-        // httpClient.begin(url);
-        // // Content-Type
-        // httpClient.addHeader("Content-Type", "application/json");
-
-        // int httpCode = httpClient.POST((uint8_t *)json, strlen(json));
-
-        // if (httpCode == 200) {
-        //     String response = httpClient.getString();
-        //     Serial.printf("[HTTP RESPONSE]: %s", response);
-
-        // } else {
-        //     Serial.printf("[HTTP ERR CODE]: %d", httpCode);
-        //     String response = httpClient.getString();
-        //     Serial.printf("[HTTP RESPONSE]: %s\n", response);
-        // }
-
-        // httpClient.end();
-
+        Serial.printf("[JSON]: %s\n", json);
 
         char url[1024] =
-            "https://eagitrodev.pythonanywhere.com/m5stick_tennis/data";
+            "http://eagitrodev.pythonanywhere.com/m5stick_tennis/post";
+
+        // url
+        httpClient.begin(url);
+        // Content-Type
+        httpClient.addHeader("Content-Type", "application/json");
+
+        int httpCode = httpClient.POST((uint8_t *)json, strlen(json));
+
+        if (httpCode == 200) {
+            String response = httpClient.getString();
+            Serial.printf("[HTTP RESPONSE]: %s", response);
+
+        } else {
+            Serial.printf("[HTTP ERR CODE]: %d", httpCode);
+            String response = httpClient.getString();
+            Serial.printf("[HTTP RESPONSE]: %s\n", response);
+        }
+
+        httpClient.end();
+        */
+
+        /**
+         * @brief テスト用 GET 消すな!
+         * 
+         */
+        /*
+        char url[1024] =
+            "https://eagitrodev.pythonanywhere.com/health/text";
 
         httpClient.begin(url);
         int status_code = httpClient.GET();
@@ -185,7 +194,29 @@ void loop() {
         Serial.printf("[HTTP RESPONSE]: %s\n", response);
         httpClient.end();
 
-        delay(1000);
+        delay(5000);
+        */
+
+        /**
+         * @brief テスト用 POST
+         * 
+         */
+        char url[1024] = "https://eagitrodev.pythonanywhere.com/health/post/text";
+        
+        char post_str[1024] = "hogehoge"
+        // url
+        httpClient.begin(url);
+        // Content-Type
+        httpClient.addHeader("Content-Type", "text/plain");
+
+        int httpCode = httpClient.POST((uint8_t *)post_str, strlen(post_str));
+        String response = httpClient.getString();
+        Serial.printf("[HTTP ERR CODE]: %d", status_code);
+        Serial.printf("[HTTP RESPONSE]: %s\n", response);
+        httpClient.end();
+
+        delay(5000);
+
     }
 }
 /*
