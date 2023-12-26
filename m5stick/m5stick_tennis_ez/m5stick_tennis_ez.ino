@@ -90,7 +90,7 @@ void create_1term_json(char *json, const int frequency_within_term,
                        const float gyros_1term[][3], const int *timers_1term,
                        const int *counts_1term) {
 
-    sprintf(json, "{term_cnt:%d,freq:%d,delay:%d,moments:[", term_count++,
+    sprintf(json, "{\"term_cnt\":%d,\"freq\":%d,\"delay\":%d,\"moments\":[", term_count++,
             frequency_within_term, delay_within_term);
     for (int i = 0; i < frequency_within_term; i++) {
         char acc[128] = {0};
@@ -98,10 +98,10 @@ void create_1term_json(char *json, const int frequency_within_term,
         array2json_arr(acc, accs_1term[i]);
         array2json_arr(gyro, gyros_1term[i]);
         if (i != frequency_within_term - 1) {
-            sprintf(json, "%s{cnt:%d,ms:%d,acc:%s,gyro:%s},", json,
+            sprintf(json, "%s{\"cnt\":%d,\"ms\":%d,\"acc\":%s,\"gyro\":%s},", json,
                     counts_1term[i], timers_1term[i], acc, gyro);
         } else {
-            sprintf(json, "%s{cnt:%d,ms:%d,acc:%s,gyro:%s}]}", json,
+            sprintf(json, "%s{\"cnt\":%d,\"ms\":%d,\"acc\":%s,\"gyro\":%s}]}", json,
                     counts_1term[i], timers_1term[i], acc, gyro);
         }
     }
@@ -161,7 +161,7 @@ void loop() {
         // url
         httpClient.begin(url);
         // Content-Type
-        httpClient.addHeader("Content-Type", "application/json");
+        httpClient.addHeader("Content-Type; charset=ascii", "application/json");
 
         int httpCode = httpClient.POST((uint8_t *)json, strlen(json));
 
@@ -177,6 +177,7 @@ void loop() {
 
         httpClient.end();
         */
+        
 
         /**
          * @brief テスト用 GET 消すな!
@@ -198,16 +199,17 @@ void loop() {
         */
 
         /**
-         * @brief テスト用 POST
+         * @brief テスト用 POST, text
          * 
          */
+        /*
         char url[1024] = "https://eagitrodev.pythonanywhere.com/health/post/text";
         
         char post_str[1024] = "hogehoge";
         // url
         httpClient.begin(url);
         // Content-Type
-        httpClient.addHeader("Content-Type", "text/plain");
+        httpClient.addHeader("Content-Type", "text/plain; charset=ascii");
 
         int httpCode = httpClient.POST((uint8_t *)post_str, strlen(post_str));
         String response = httpClient.getString();
@@ -216,6 +218,28 @@ void loop() {
         httpClient.end();
 
         delay(5000);
+        */
+        
+        /**
+         * @brief テスト用 POST, JSON
+         * 
+         */
+
+        char url[1024] = "https://eagitrodev.pythonanywhere.com/health/post/json";
+        char json[1024] = "{\"hoge\":3}";
+        httpClient.begin(url);
+        // Content-Type
+        httpClient.addHeader("Content-Type", "application/json; charset=ascii");
+
+        int httpCode = httpClient.POST((uint8_t *)post_str, strlen(post_str));
+        String response = httpClient.getString();
+        Serial.printf("[HTTP ERR CODE]: %d", httpCode);
+        Serial.printf("[HTTP RESPONSE]: %s\n", response);
+        httpClient.end();
+
+        delay(5000);
+
+        
 
     }
 }

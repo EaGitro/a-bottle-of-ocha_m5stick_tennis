@@ -111,9 +111,23 @@ def health_text():
 @app.route("/health/post/text", methods=["POST"])
 def health_post_text():
     req  = request
-    data = req.get_data().decode("utf-8")
-    print("data, type:",data, type(data))
-    return f"posted data is {data}"             # data, type: b'hoge' <class 'bytes'>
+    print(vars(req))
+    data = req.get_data()
+    print("data, type:",data, type(data))   # data, type: b'hoge' <class 'bytes'>
+    # return f"posted data is {data}"          
+    return data
+
+
+@app.route("/health/post/json", methods=["POST"])
+def health_post_json():
+    req = request
+    req_is_json = req.is_json
+    req_json = req.get_json()
+    print(vars(req), req_json)
+    return {"status":req_is_json}
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)  # デバッグモードがオンになり、変更があるとリロードされ変更が適用される。
