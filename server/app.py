@@ -1,6 +1,6 @@
 from genericpath import isfile
 from math import cos
-from flask import Flask, request, make_response, jsonify
+from flask import Flask, request, make_response, jsonify, render_template
 import json, os
 
 # import ndjson
@@ -23,7 +23,7 @@ class const:
 @app.route("/m5stick_tennis/post", methods=["POST"])
 def m5stick_tennis_post():
     data = request.json
-    data = json.dumps(data, ensure_ascii=False, indent=2)
+    data = json.dumps(data)
     print("data",data,flush=True)
     prev_data = ""
     os.makedirs("./data", exist_ok=True)
@@ -62,10 +62,8 @@ def m5stick_tennis_data():
 
 @app.route("/m5stick_tennis/view")
 def view():
-    accelerations = ""
-    f = open(const.latest_data_path, "r")
-    accelerations = f.read()
-    return f"{accelerations}"
+    
+    return render_template("m5stick_tennis_view.html")
 
 @app.route("/health/text")
 def health_text():
@@ -125,6 +123,9 @@ def health_post_json():
     req_json = req.get_json()
     print(vars(req), req_json)
     return {"status":req_is_json}
+
+
+
 
 
 

@@ -84,7 +84,6 @@ void get_1term_data(int frequency_within_term, int delay_within_term,
  * ]
  * }`
  */
-
 void create_1term_json(char *json, const int frequency_within_term,
                        const int delay_within_term, const float accs_1term[][3],
                        const float gyros_1term[][3], const int *timers_1term,
@@ -144,7 +143,7 @@ void loop() {
          * @brief 本番用 POST 消すな!
          * 
          */
-        /*
+        
         char json[2048] = {0};
 
         get_1term_data(frequency_within_term, delay_within_term, accs_1term,
@@ -161,7 +160,7 @@ void loop() {
         // url
         httpClient.begin(url);
         // Content-Type
-        httpClient.addHeader("Content-Type; charset=ascii", "application/json");
+        httpClient.addHeader("Content-Type", "application/json; charset=ascii");
 
         int httpCode = httpClient.POST((uint8_t *)json, strlen(json));
 
@@ -176,7 +175,7 @@ void loop() {
         }
 
         httpClient.end();
-        */
+        
         
 
         /**
@@ -224,21 +223,21 @@ void loop() {
          * @brief テスト用 POST, JSON
          * 
          */
-
+        /*
         char url[1024] = "https://eagitrodev.pythonanywhere.com/health/post/json";
         char json[1024] = "{\"hoge\":3}";
         httpClient.begin(url);
         // Content-Type
         httpClient.addHeader("Content-Type", "application/json; charset=ascii");
 
-        int httpCode = httpClient.POST((uint8_t *)post_str, strlen(post_str));
+        int httpCode = httpClient.POST((uint8_t *)json, strlen(json));
         String response = httpClient.getString();
         Serial.printf("[HTTP ERR CODE]: %d", httpCode);
         Serial.printf("[HTTP RESPONSE]: %s\n", response);
         httpClient.end();
 
         delay(5000);
-
+        */
         
 
     }
