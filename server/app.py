@@ -52,10 +52,10 @@ def m5stick_tennis_data():
     os.makedirs("./data", exist_ok=True)       
     if os.path.isfile(const.latest_data_path): 
         with open(const.latest_data_path, mode="r") as f:
-            latest_data = f.read()
+            latest_data = json.load(f)
     if os.path.isfile(const.latest_data_path):
         with open(const.prev_data_path, mode="r") as f:
-            prev_data = f.read()
+            prev_data = json.load(f)
 
     return {"latest_data":latest_data, "prev_data":prev_data}
 
