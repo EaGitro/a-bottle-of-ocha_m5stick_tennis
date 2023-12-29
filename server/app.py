@@ -22,7 +22,7 @@ class const:
 
 @app.route("/m5stick_tennis/post", methods=["POST"])
 def m5stick_tennis_post():
-    data = request.data.decode("ascii")
+    data = request.get_data().decode("ascii")
     # data = json.dumps(data)
     print("data",data,flush=True)
     prev_data = ""
