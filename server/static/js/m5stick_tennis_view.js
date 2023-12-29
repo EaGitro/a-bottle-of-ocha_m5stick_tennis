@@ -109,7 +109,7 @@ function startFetch() {
     console.log("startFetch");
     if (!loopId) {
         document.querySelector("#clickButton").innerText = "stop";
-        loopId = setInterval(operateNode, intervalTime, "http://eagitrodev.pythonanywhere.com/m5stick_tennis/view");
+        loopId = setInterval(operateNode, intervalTime, "https://eagitrodev.pythonanywhere.com/m5stick_tennis/view");
         isFetching = !isFetching;
     }
 }

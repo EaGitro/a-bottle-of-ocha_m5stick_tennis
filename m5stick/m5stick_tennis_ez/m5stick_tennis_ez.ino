@@ -155,7 +155,7 @@ void loop() {
         Serial.printf("[JSON]: %s\n", json);
 
         char url[1024] =
-            "http://eagitrodev.pythonanywhere.com/m5stick_tennis/post";
+            "https://eagitrodev.pythonanywhere.com/m5stick_tennis/post";
 
         // url
         httpClient.begin(url);
