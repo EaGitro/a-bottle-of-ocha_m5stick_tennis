@@ -23,7 +23,7 @@ class const:
 @app.route("/m5stick_tennis/post", methods=["POST"])
 def m5stick_tennis_post():
     data = request.json
-    data = json.dumps(data)
+    # data = json.dumps(data)
     print("data",data,flush=True)
     prev_data = ""
     os.makedirs("./data", exist_ok=True)
