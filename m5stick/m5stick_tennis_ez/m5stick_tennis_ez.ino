@@ -39,20 +39,45 @@ void readGyro() {
 
 
 
+// もうめんどくさいからコメント日本語で書くっぴ...
 /**
- *
- * @brief creates data, and stocks in arrays
- *
+ * @brief 一度サーバに送信してから次に送信するまでの期間を `term` と呼ぶ
  */
-
 int term_count = 0;
 
-const int frequency_within_term = 10;
-const int delay_within_term = 50;
+/**
+ * @brief term 内で何回データを取るか
+ */
+const int frequency_within_term = 20;       
+
+/**
+ *  term 内でデータを取る間隔 (ms)。 frequency_within_term * delay_within_term = delay ms秒数になる
+ */
+const int delay_within_term = 100;
+
+/**
+ * @brief acc の値を収納(x,y,zがあるため2次元配列)
+ */
 float accs_1term[frequency_within_term][3];
+
+/**
+ * @brief gyro の値を収納(x,y,zがあるため2次元配列)
+ */
 float gyros_1term[frequency_within_term][3];
+
+/**
+ * @brief term ごとの起動からの経過時間 (ms)
+ */
 int timers_1term[frequency_within_term];
+
+/**
+ * @brief term の起動からの回数
+ */
 int counts_1term[frequency_within_term];
+
+/**
+ * @brief creates data, and stocks in arrays
+ */
 void get_1term_data(int frequency_within_term, int delay_within_term,
                     float accs_1term[][3], float gyros_1term[][3],
                     int *timers_1term, int *counts_1term) {

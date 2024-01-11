@@ -2,7 +2,7 @@ let isFetching = false;
 
 let loopId = 0;
 
-let intervalTime = 500;
+let intervalTime = 2000;
 
 const latestData = {
     term_cnt: -1
