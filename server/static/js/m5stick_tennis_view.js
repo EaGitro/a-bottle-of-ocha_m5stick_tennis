@@ -105,29 +105,48 @@ async function operateNode(endpoint) {
     }
 }
 
-function startFetch() {
+
+
+
+
+
+
+/**
+ * 
+ */
+async function startFetch() {
     console.log("startFetch");
-    if (!loopId) {
+    if (!isFetching) {
+        isFetching = true;
         document.querySelector("#clickButton").innerText = "stop";
-        loopId = setInterval(operateNode, intervalTime, "/m5stick_tennis/data");
-        isFetching = !isFetching;
+        while (isFetching){
+            await operateNode("/m5stick_tennis/data")
+            await new Promise(resolve => setTimeout(resolve, intervalTime))
+        }
+        // loopId = setInterval(operateNode, intervalTime, "/m5stick_tennis/data");
     }
 }
 
 function stopFetch() {
     console.log("stopfetch");
-    if (loopId) {
+    if (isFetching) {
         document.querySelector("#clickButton").innerText = "start";
-        clearInterval(loopId);
-        loopId = 0;
-        isFetching = !isFetching;
+        isFetching = false;
+        // clearInterval(loopId);
+        // loopId = 0;
+        // isFetching = !isFetching;
     }
 }
 
+/**
+ * 新バージョン
+ */
 
-function clickHandler() {
+
+
+async function clickHandler() {
     if (!isFetching) {
-        startFetch();
+        await startFetch();
     } else {
         stopFetch();
     }
