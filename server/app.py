@@ -60,9 +60,8 @@ def m5stick_tennis_data():
     return {"latest_data":latest_data, "prev_data":prev_data}
 
 
-@app.route("/m5stick_tennis/view")
+@app.route("/view")
 def view():
-    
     return render_template("m5stick_tennis_view.html")
 
 @app.route("/health/text")
@@ -126,9 +125,5 @@ def health_post_json():
 
 
 
-
-
-
-
 if __name__ == "__main__":
-    app.run(debug=True)  # デバッグモードがオンになり、変更があるとリロードされ変更が適用される。
+    app.run(host='0.0.0.0',port=8080,debug=True)  # デバッグモードがオンになり、変更があるとリロードされ変更が適用される。

@@ -11,8 +11,8 @@ WiFiMulti wifiMulti;
 HTTPClient httpClient;
 
 
-const char *ssid = ssid_ea;
-const char *password = password_ea;
+const char *ssid = ssid_taku;
+const char *password = password_taku;
 const char *token = token_secret;
 // 加速度、格速度を入れるための変数宣言
 float acc[3];        // 加速度測定値格納用（X、Y、Z）
@@ -180,7 +180,7 @@ void loop() {
         Serial.printf("[JSON]: %s\n", json);
 
         char url[1024] =
-            "https://eagitrodev.pythonanywhere.com/m5stick_tennis/post";
+            "http://192.168.10.9:8888/m5stick_tennis/post";
 
         // url
         httpClient.begin(url);
