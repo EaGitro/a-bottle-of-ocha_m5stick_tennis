@@ -34,7 +34,7 @@ function trapezoidFormula(origin_list, calculated_list){
  */
 function getFetchData(lsit){
   // print("getFetcData")
-  print("fetchedData",fetchedData);
+  // print("fetchedData",fetchedData);
   for(let i=0; i<3; i++){
     sub_list=[]
     for(let j=0; j<5; j++){
@@ -73,13 +73,13 @@ function draw(){
       coor_list=[[0],[0],[0]];
       //加速度リスト
       acc_list = getFetchData(acc_list)
-      print("acc_list",acc_list);
+      // print("acc_list",acc_list);
       //速度リスト
       vel_list = trapezoidFormula(acc_list, vel_list)
-      print("vel_list",vel_list);
+      // print("vel_list",vel_list);
       //変位リスト
       coor_list = trapezoidFormula(vel_list, coor_list)
-      print("coor_list",coor_list);
+      // print("coor_list",coor_list);
 
       k=0;
       isNewData =false;
