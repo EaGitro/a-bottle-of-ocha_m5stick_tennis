@@ -53,7 +53,7 @@ const int frequency_within_term = 20;
 /**
  *  term 内でデータを取る間隔 (ms)。 frequency_within_term * delay_within_term = delay ms秒数になる
  */
-const int delay_within_term = 100;
+const int delay_within_term = 50;
 
 /**
  * @brief acc の値を収納(x,y,zがあるため2次元配列)

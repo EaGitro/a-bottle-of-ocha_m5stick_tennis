@@ -1,134 +1,69 @@
-from genericpath import isfile
-from math import cos
 from flask import Flask, request, make_response, jsonify, render_template
 import json, os
 
-# import ndjson
-
 app = Flask(__name__)
 
-try:
-    app.json.ensure_ascii = False           # flask version >= 3.0.0
-except:
-    app.config['JSON_AS_ASCII'] = False     # flask version < 3.0.0
-
-
 class const:
-    latest_data_path =  "data/m5stick_tennis_latest_data.json"
-    prev_data_path = "data/m5stick_tennis_prev_data.json"
+    data_path = [
+        "data/m5stick_tennis_prev0_data.json",
+        "data/m5stick_tennis_prev1_data.json",
+        "data/m5stick_tennis_prev2_data.json",
+        "data/m5stick_tennis_prev3_data.json",
+        "data/m5stick_tennis_prev4_data.json"
+    ]
 
 
 
-
+    
 @app.route("/m5stick_tennis/post", methods=["POST"])
 def m5stick_tennis_post():
+    #データの取得
     data = request.get_data().decode("ascii")
     # data = json.dumps(data)
-    print("data",data,flush=True)
-    prev_data = ""
+    # print("data",data,flush=True)
+
     os.makedirs("./data", exist_ok=True)
-    is_file = os.path.isfile(const.latest_data_path)
-    print("is_file:", is_file)
-    if is_file:
-        with open(const.latest_data_path) as f:
-            prev_data = f.read()
-            print("prev_data",prev_data,flush=True)
 
-    with open(const.latest_data_path, mode="w") as f:
-        
-        f.write(data)
+    for i in range(len(const.data_path)-1):
+        prev_data = ""
+        is_file = os.path.isfile(const.data_path[3-i])
+        # print("is_file:", is_file)
+        if is_file:
+            with open(const.data_path[3-i]) as f:
+                prev_data = f.read()
+                # print("prev_data",prev_data,flush=True)
+        with open(const.data_path[4-i], mode="w") as f:
+            f.write(prev_data)
 
-    with open(const.prev_data_path, mode="w") as f:
-        f.write(prev_data)
+    with open(const.data_path[0], mode="w") as f:
+            f.write(data)
     
     return {"prevdata":prev_data}
 
 
-
+#JSON形式のデータリストを返す
 @app.route("/m5stick_tennis/data")
 def m5stick_tennis_data():
-    latest_data = '{}'
-    prev_data = "{}"
-    os.makedirs("./data", exist_ok=True)       
-    if os.path.isfile(const.latest_data_path): 
-        with open(const.latest_data_path, mode="r") as f:
-            latest_data = json.load(f)
-    if os.path.isfile(const.latest_data_path):
-        with open(const.prev_data_path, mode="r") as f:
-            prev_data = json.load(f)
+    data_list = ['{}','{}','{}','{}','{}']
+    os.makedirs("./data", exist_ok=True)      
 
-    return {"latest_data":latest_data, "prev_data":prev_data}
+    for i in range(len(const.data_path)):
+        is_file = os.path.isfile(const.data_path[i])
+        if is_file:
+            with open(const.data_path[i], mode="r") as f:
+                data_list[i] = json.load(f)
 
-
-@app.route("/m5stick_tennis/view")
-def view():
+    return {"data_list":data_list}
     
-    return render_template("m5stick_tennis_view.html")
-
-@app.route("/health/text")
-def health_text():
-    return "health_text\n"
-
-# import datetime
-# @app.route("/health/get/response")
-# def health_get_response():
-#     response_text = make_response(("hogeほげ", "200"))
-#     # response_text.headers.setlist("Content-Type", ["text/html; charset=ascii","text/plain; charset=utf-8"])
-#     # response_text.content_type = "text/plain; charset=utf-8"
-#     print("response_text:",vars(response_text))
-#     print("response_text.get_data():",response_text.get_data(as_text=False))      # as_text=True:(非エスケープ) hogeほげ, as_text=False:(エスケープ) b'hoge\xe3\x81\xbb\xe3\x81\x92'
-#     # print(f'response_text.headers: <{response_text.headers}>,\nresponse_text.headers[Content-Type]: <{response_text.headers["Content-Type"]}>\n')
-#     print("response_text.response",response_text.response, type(response_text.response))
-
-#     # response_json = make_response(jsonify({"hogeほげ":3}))
-#     response_json = make_response({"hogeほげ":3})
-#     print("response_json:",vars(response_json))
-#     print("response_json.get_data():",response_json.get_data(as_text=True))
-#     print(f'response_json.headers: <{response_json.headers}>,\nresponse_json.headers["Content-Type"]: <{response_json.headers["Content-Type"]}>\n')
-#     print("response_json.response", response_json.response, type(response_json.response))
-
-#     # response_json["Content-Type"] = "application/json; charset=utf-8"     # このようにすることはできない(このやり方ではRead-onlyらしい。 `TypeError: 'Response' object does not support item assignment`)
-#     response_json.content_type = "application/json; charset=utf-8"
-#     response_json.headers["Content-Type"] = "application/json; charset=utf-8"
-#     print("response_json.get_data():",response_json.get_data(as_text=True))
-#     response_json.content_length = 90       # 変更できる
-#     response_json.date = datetime.date(2002,11,11)
-#     # response_json.status_code = 200
-#     # response_json.status = "200 OK"
-#     print("status:",response_json.status)
-#     # response_json.headers["Date"] = datetime.date(2002,11,11)
-#     # response_json.connection = "open"
-#     print(dir(response_json), response_json.json, response_json.date, response_json.data)
-#     print(dir(response_json.headers))
-#     # response_json.headers.add("Date", datetime.date(2002,11,11))
-#     print(vars(response_json.headers))
-#     # print(f'response_json.headers: <{response_json.headers}>,\nresponse_json.headers["Content-Type"]: <{response_json.headers["Content-Type"]}>\n')
-#     return response_text
 
 
-@app.route("/health/post/text", methods=["POST"])
-def health_post_text():
-    req  = request
-    print(vars(req))
-    data = req.get_data()
-    print("data, type:",data, type(data))   # data, type: b'hoge' <class 'bytes'>
-    # return f"posted data is {data}"          
-    return data
-
-
-@app.route("/health/post/json", methods=["POST"])
-def health_post_json():
-    req = request
-    req_is_json = req.is_json
-    req_json = req.get_json()
-    print(vars(req), req_json)
-    return {"status":req_is_json}
+#ブラウザからのアクセスを処理する、htmlを表示
+@app.route('/')
+def view():
+    return render_template("index.html")
 
 
 
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080, debug=True, reloader_interval=5)
 
-
-
-
-if __name__ == "__main__":
-    app.run(debug=True)  # デバッグモードがオンになり、変更があるとリロードされ変更が適用される。
